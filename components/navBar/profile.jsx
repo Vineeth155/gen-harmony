@@ -1,9 +1,13 @@
 "use client";
 
 import { useAuth } from "@/app/context/authContext";
+import { useEffect, useRef, useState } from "react";
 
 const Profile = () => {
   const { user, logOut, googleSignIn } = useAuth();
+
+  const [profileClick, setProfileClick] = useState(false);
+  const profileRef = useRef(null);
 
   const handleSignIn = async () => {
     try {
@@ -16,31 +20,65 @@ const Profile = () => {
   const handleSignOut = async () => {
     try {
       await logOut();
+      setProfileClick(false);
     } catch (err) {
       console.log(err);
     }
   };
 
-  return (
-    <div>
-      <button>
-        {user ? (
-          <img variant="solid" alt={user?.displayName} src={user?.photoURL} />
-        ) : (
-          <img alt="default" src="https://bit.ly/broken-link" />
-        )}
+  const handleClickOutside = (event) => {
+    if (profileRef.current && !profileRef.current.contains(event.target)) {
+      setProfileClick(false); // Close dropdown if clicked outside
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener on mount
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Clean up event listener on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  return user ? (
+    <div
+      ref={profileRef}
+      className={`flex items-center h-full relative border-l-2 hover:bg-foreground ease-in-out duration-300 ${
+        profileClick ? "bg-foreground" : "bg-background"
+      }`}
+    >
+      <button onClick={() => setProfileClick((prev) => !prev)}>
+        <img
+          className={`h-12 rounded-full p-1 hover:scale-110 ease-in-out duration-200`}
+          alt={user?.displayName}
+          src={user?.photoURL}
+        />
       </button>
-      {user ? (
-        <div>
-          <div>Profile</div>
-          <div onClick={handleSignOut}>Sign Out</div>
+      <div
+        className={`${
+          profileClick ? "flex" : "hidden"
+        } absolute top-full w-max bg-background -right-[1.5px] text-background flex-col border-2 border-foreground`}
+      >
+        <div className="hover:bg-foreground w-full border-b-2 text-foreground hover:text-background cursor-pointer pl-6 pr-2 py-1 text-right font-normal">
+          Profile
         </div>
-      ) : (
-        <div>
-          <div onClick={handleSignIn}>Sign In</div>
+        <div
+          className="hover:bg-foreground w-full text-foreground hover:text-background cursor-pointer pl-6 pr-2 py-1 text-right font-normal"
+          onClick={handleSignOut}
+        >
+          Sign Out
         </div>
-      )}
+      </div>
     </div>
+  ) : (
+    <button
+      onClick={handleSignIn}
+      className="px-2 py-1 border-l-2 ease-in-out duration-300 font-medium hover:bg-foreground hover:text-background"
+    >
+      Sign In
+    </button>
   );
 };
 

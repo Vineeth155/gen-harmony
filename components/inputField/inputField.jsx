@@ -92,9 +92,11 @@ const MusicGenApp = () => {
       {user ? (
         <button
           onClick={handleGenerateMusic}
-          disabled={loading}
+          disabled={loading || !message || message.trim().length === 0}
           className={`w-full py-3 text-white rounded-lg mb-6 focus:outline-none ${
-            loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
+            loading || !message || message.trim().length === 0
+              ? "bg-gray-400"
+              : "bg-indigo-600 hover:bg-indigo-700"
           }`}
         >
           {loading ? "Generating..." : "Generate Music"}

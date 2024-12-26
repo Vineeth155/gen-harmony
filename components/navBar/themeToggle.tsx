@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
 
 const ThemeToggle = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -19,7 +18,7 @@ const ThemeToggle = () => {
     } else {
       setIsDarkMode(false);
       document.documentElement.classList.remove("dark");
-      document.documentElement.classList.add("light"); // Ensure light mode class is set
+      document.documentElement.classList.add("light");
     }
   }, []);
 
@@ -33,7 +32,7 @@ const ThemeToggle = () => {
       document.documentElement.classList.remove("light");
     } else {
       document.documentElement.classList.remove("dark");
-      document.documentElement.classList.add("light"); // Ensure light mode class is added
+      document.documentElement.classList.add("light");
     }
 
     localStorage.setItem("theme", newTheme);
@@ -42,40 +41,46 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="relative flex bg-gray-800 dark:bg-gray-500 items-center justify-center w-8 h-8 rounded-full transition-colors"
+      className="group relative flex items-center justify-center w-full h-full transition-colors mx-auto hover:bg-foreground ease-in-out duration-300"
     >
       {/* Moon Icon */}
-      <motion.div
-        initial={{ opacity: 1, x: isDarkMode ? -20 : 0 }}
-        animate={{
-          opacity: isDarkMode ? 1 : 0,
-          x: isDarkMode ? 0 : -20,
-        }}
-        transition={{ duration: 0.4 }}
-        className="absolute w-6 h-6 rounded-full flex items-center justify-center"
-      >
-        🌙
-      </motion.div>
-
-      {/* Sun Icon */}
-      <motion.div
-        initial={{ opacity: 1, x: isDarkMode ? 20 : 0 }}
-        animate={{
-          opacity: isDarkMode ? 0 : 1,
-          x: isDarkMode ? 20 : 0,
-        }}
-        transition={{ duration: 0.4 }}
-        className="absolute w-6 h-6 rounded-full flex items-center justify-center"
-      >
-        ☀️
-      </motion.div>
-
-      {/* Toggle Slider */}
-      {/* <motion.div
-        className="absolute w-8 h-8 bg-white rounded-full shadow-md"
-        animate={{ x: isDarkMode ? 24 : 0 }}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
-      /> */}
+      {isDarkMode ? (
+        <svg
+          className="stroke-current text-foreground group-hover:text-background transition-colors"
+          fill="none"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          height="1.5em"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+      ) : (
+        <svg
+          className="stroke-current text-foreground group-hover:text-background transition-colors"
+          fill="none"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          height="1.5em"
+          width="1.5em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path>
+          <path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path>
+          <path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
+      )}
     </button>
   );
 };
