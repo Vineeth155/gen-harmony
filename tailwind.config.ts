@@ -13,6 +13,7 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         borderColor: "var(--foreground)",
+        focusForeground: "var(--focus-foreground)",
       },
     },
   },

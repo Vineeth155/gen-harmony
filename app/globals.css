@@ -5,11 +5,13 @@
 :root {
   --background: #ededed;
   --foreground: #171717;
+  --focus-foreground: #17171790;
 }
 
 .dark {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --focus-foreground: #ededed90;
 }
 
 * {

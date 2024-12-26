@@ -41,7 +41,7 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="group relative flex items-center justify-center w-full h-full transition-colors mx-auto hover:bg-foreground ease-in-out duration-300"
+      className="rounded-sm rounded-r-none border-r group relative flex items-center justify-center w-full h-full transition-colors mx-auto hover:bg-foreground hover:border-background ease-in-out duration-300"
     >
       {/* Moon Icon */}
       {isDarkMode ? (

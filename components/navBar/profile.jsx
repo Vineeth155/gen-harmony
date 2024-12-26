@@ -45,13 +45,16 @@ const Profile = () => {
   return user ? (
     <div
       ref={profileRef}
-      className={`flex items-center h-full relative border-l-2 hover:bg-foreground ease-in-out duration-300 ${
-        profileClick ? "bg-foreground" : "bg-background"
+      className={`flex rounded-sm items-center h-full relative border-l rounded-l-none hover:bg-foreground ease-in-out duration-300 ${
+        profileClick ? "bg-foreground border-background" : "bg-background"
       }`}
     >
-      <button onClick={() => setProfileClick((prev) => !prev)}>
+      <button
+        className="h-10 p-0.5"
+        onClick={() => setProfileClick((prev) => !prev)}
+      >
         <img
-          className={`h-12 rounded-full p-1 hover:scale-110 ease-in-out duration-200`}
+          className={`h-full rounded-sm`}
           alt={user?.displayName}
           src={user?.photoURL}
         />
