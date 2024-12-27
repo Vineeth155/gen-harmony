@@ -3,7 +3,6 @@
 import { useAppContext } from "@/app/context/appContext";
 import { generateBase64SVG } from "@/utils/gradients";
 import ProfileForm from "../profileForm/profileForm";
-import { Suspense } from "react";
 
 export default function UserDetails() {
   const { user, loadingAuth } = useAppContext();
