@@ -1,10 +1,12 @@
 "use client";
 
-import { useAuth } from "@/app/context/authContext";
+import { useAppContext } from "@/app/context/appContext";
+// import { useAuth } from "@/app/context/authContext";
 import { useState, useEffect } from "react";
 
 const MusicGenApp = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const { user } = useAppContext();
 
   const [message, setMessage] = useState(""); // User input for music description
   const [audioUrl, setAudioUrl] = useState(null); // URL of the generated audio

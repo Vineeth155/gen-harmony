@@ -1,10 +1,13 @@
 "use client";
 
-import { useAuth } from "@/app/context/authContext";
+import { useAppContext } from "@/app/context/appContext";
+import { generateBase64SVG } from "@/utils/gradients";
+import Link from "next/link";
+// import { useAuth } from "@/app/context/authContext";
 import { useEffect, useRef, useState } from "react";
 
 const Profile = () => {
-  const { user, logOut, googleSignIn } = useAuth();
+  const { user, logOut, googleSignIn } = useAppContext();
 
   const [profileClick, setProfileClick] = useState(false);
   const profileRef = useRef(null);
@@ -56,7 +59,7 @@ const Profile = () => {
         <img
           className={`h-full rounded-sm`}
           alt={user?.displayName}
-          src={user?.photoURL}
+          src={generateBase64SVG(user?.email)}
         />
       </button>
       <div
@@ -64,9 +67,20 @@ const Profile = () => {
           profileClick ? "flex" : "hidden"
         } absolute top-full w-max bg-background -right-[1.5px] text-background flex-col border-2 border-foreground`}
       >
-        <div className="hover:bg-foreground w-full border-b-2 text-foreground hover:text-background cursor-pointer pl-6 pr-2 py-1 text-right font-normal">
+        <Link
+          onClick={() => setProfileClick(false)}
+          href={"/"}
+          className="hover:bg-foreground w-full border-b-2 text-foreground hover:text-background cursor-pointer pl-6 pr-2 py-1 text-right font-normal"
+        >
+          Home
+        </Link>
+        <Link
+          onClick={() => setProfileClick(false)}
+          href={"/profile"}
+          className="hover:bg-foreground w-full border-b-2 text-foreground hover:text-background cursor-pointer pl-6 pr-2 py-1 text-right font-normal"
+        >
           Profile
-        </div>
+        </Link>
         <div
           className="hover:bg-foreground w-full text-foreground hover:text-background cursor-pointer pl-6 pr-2 py-1 text-right font-normal"
           onClick={handleSignOut}
