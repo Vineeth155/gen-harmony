@@ -1,5 +1,4 @@
 import UserDetails from "@/components/profile/userDetails";
-import ProfileForm from "@/components/profileForm/profileForm";
 
 export default function Profile() {
   return (
