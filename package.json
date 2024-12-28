@@ -9,13 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/image-url": "^1.1.0",
+    "@sanity/vision": "^3.68.3",
     "@types/color-hash": "^2.0.0",
     "color-hash": "^2.0.2",
     "firebase": "^11.1.0",
     "motion": "^11.15.0",
     "next": "15.1.2",
+    "next-sanity": "^9.8.30",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sanity": "^3.68.3",
+    "styled-components": "^6.1.13"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -3,10 +3,21 @@
 import { useAppContext } from "@/app/context/appContext";
 // import { useAuth } from "@/app/context/authContext";
 import { useState, useEffect } from "react";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
+import { client } from "@/utils/sanityClient";
+import useUpdateData from "@/hooks/useUpdateData";
+import { db } from "@/app/firebase";
 
 const MusicGenApp = () => {
   // const { user } = useAuth();
-  const { user } = useAppContext();
+  const { user, userID, updateUserState } = useAppContext();
+  const { updateData } = useUpdateData();
 
   const [message, setMessage] = useState(""); // User input for music description
   const [audioUrl, setAudioUrl] = useState(null); // URL of the generated audio
@@ -70,10 +81,76 @@ const MusicGenApp = () => {
       // Convert the blob to a Base64 string
       const base64Audio = await blobToBase64(audioBlob);
 
+      // Upload the audio blob to Firebase Storage
+      // const fileName = `${userID}-${Date.now()}.wav`;
+      // const audioStorageUrl = await uploadAudio(audioBlob, fileName);
+
       // Create an audio URL from the Base64 string
       const audioUrl = `data:audio/wav;base64,${base64Audio}`;
-      setAudioUrl(audioUrl); // Set the audio URL
-      setSuccess(true); // Indicate success
+
+      // Upload the audio to Sanity
+      const audioFile = new File([audioBlob], "audio-file.wav", {
+        type: "audio/wav",
+      });
+
+      const audioAsset = await client.assets.upload("file", audioFile, {
+        contentType: "audio/wav",
+        filename: "generated-audio.wav",
+      });
+
+      // Get the URL of the uploaded audio file
+      const sanityAudioUrl = audioAsset.url;
+
+      // Create a document in Sanity with the audio file metadata
+      await client.create({
+        _type: "audio",
+        title: "audio file", // Assuming title is added to your form
+        description: message,
+        audioUrl: sanityAudioUrl, // Store the Sanity URL in Firebase
+        generationTime: generationTime,
+        generatedAt: new Date().toISOString(),
+        userId: userID, // User ID from your app context
+      });
+
+      const musicMetaData = {
+        userId: userID,
+        description: message,
+        audioUrl: sanityAudioUrl,
+        generationTime: generationTime,
+        generatedAt: serverTimestamp(),
+        genres: [],
+        likes: 0,
+        comments: [],
+        isPublic: true,
+      };
+
+      // await postData("music", musicMetaData);
+
+      try {
+        const collectionRef = collection(db, "music");
+        const newDocRef = await addDoc(collectionRef, musicMetaData);
+
+        // Listen for the document to be written
+        const unsubscribe = onSnapshot(
+          doc(db, "music", newDocRef.id),
+          (doc) => {
+            if (doc.exists()) {
+              const updatedGenMusic =
+                user.genMusic.length !== null
+                  ? [...user.genMusic, newDocRef.id]
+                  : [newDocRef.id];
+              updateData("users", userID, "genMusic", updatedGenMusic);
+              updateUserState("genMusic", updatedGenMusic);
+
+              setAudioUrl(sanityAudioUrl);
+              setSuccess(true);
+              unsubscribe();
+            }
+          }
+        );
+      } catch (err) {
+        console.log("error posting data", err);
+      }
     } catch (error) {
       // Handle errors
       setError(

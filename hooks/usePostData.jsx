@@ -6,6 +6,7 @@ const usePostData = () => {
   const [postLoading, setPostLoading] = useState(false);
   const [postError, setPostError] = useState(null);
   const [postSuccess, setPostSuccess] = useState(false);
+  const [postID, setPostID] = useState(null);
 
   const postData = async (collectionName, data) => {
     setPostLoading(true);
@@ -21,6 +22,7 @@ const usePostData = () => {
         doc(db, collectionName, newDocRef.id),
         (doc) => {
           if (doc.exists()) {
+            setPostID(newDocRef.id);
             setPostSuccess(true);
             unsubscribe(); // Stop listening after success
           }
@@ -33,7 +35,7 @@ const usePostData = () => {
     }
   };
 
-  return { postData, postLoading, postError, postSuccess };
+  return { postData, postLoading, postError, postSuccess, postID };
 };
 
 export default usePostData;
