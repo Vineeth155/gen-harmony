@@ -10,13 +10,7 @@ import {
   onAuthStateChanged,
 } from "../firebase"; // Import Firebase auth functions
 import { db } from "../firebase"; // Import Firestore methods
-import {
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 
 // Create a context
 const AppContext = createContext();
@@ -26,12 +20,7 @@ export const AppProvider = ({ children }) => {
   // Define your global state here
   const [user, setUser] = useState(null);
   const [userID, setUserID] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const [error, setError] = useState(null);
-  const [fetchedData, setFetchedData] = useState(null);
-  const [postDataSuccess, setPostDataSuccess] = useState(false); // Track success of post
-  const [postDataError, setPostDataError] = useState(null); // Track error of post
 
   // Function to sign in with Google
   const googleSignIn = async () => {
@@ -71,15 +60,6 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const fetchUser = async () => {
-    const docRef = doc(db, "users", userID);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      setUser(docSnap.data()); // Set user with the fetched data from Firestore
-    }
-  };
-
   // Function to log out
   const logOut = async () => {
     try {
@@ -91,62 +71,11 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Function to fetch data by document ID from Firestore
-  const fetchDataById = async (docId, collectionName) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const docRef = doc(db, collectionName, docId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setFetchedData(docSnap.data());
-      } else {
-        setError("No document found!");
-      }
-    } catch (err) {
-      setError("Error fetching data: " + err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Post data to Firestore (create or overwrite a document with a specific ID)
-  const postData = async (docId, data, collectionName) => {
-    try {
-      setLoading(true);
-      setPostDataError(null);
-      const docRef = doc(db, collectionName, docId);
-      await setDoc(docRef, data);
-
-      setPostDataSuccess(true); // Update success state
-    } catch (err) {
-      setPostDataError("Error posting data: " + err.message);
-      setPostDataSuccess(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Modify a specific field in a Firestore document
-  const updateData = async (docId, field, value, collectionName) => {
-    try {
-      setLoading(true);
-      setPostDataError(null);
-      const docRef = doc(db, collectionName, docId);
-
-      await updateDoc(docRef, {
-        [field]: value, // Dynamically set the field name and value
-      });
-
-      setPostDataSuccess(true); // Update success state
-    } catch (err) {
-      setPostDataError("Error updating data: " + err.message);
-      setPostDataSuccess(false);
-    } finally {
-      setLoading(false);
-      fetchUser();
-    }
+  const updateUserState = (field, value) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      [field]: value,
+    }));
   };
 
   // Listen for authentication changes and update user data
@@ -176,16 +105,9 @@ export const AppProvider = ({ children }) => {
 
   const contextValue = {
     user,
+    updateUserState,
     userID,
     loadingAuth,
-    fetchedData,
-    fetchDataById,
-    postData,
-    updateData,
-    postDataSuccess,
-    postDataError,
-    loading,
-    error,
     googleSignIn,
     logOut,
   };

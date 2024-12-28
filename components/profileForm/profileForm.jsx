@@ -2,16 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "@/app/context/appContext";
+import useUpdateData from "../../hooks/useUpdateData";
 
 const ProfileForm = () => {
-  const {
-    user,
-    userID,
-    loadingAuth,
-    updateData,
-    postDataError,
-    postDataSuccess,
-  } = useAppContext();
+  const { user, userID, loadingAuth, updateUserState } = useAppContext();
+
+  const { updateData, updateSuccess, updateError } = useUpdateData();
 
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
@@ -97,17 +93,16 @@ const ProfileForm = () => {
     }
 
     if (field === "name") {
-      updateData(userID, "displayName", displayName, "users");
+      updateData("users", userID, "displayName", displayName);
       disableAllFields("all");
+      updateUserState("displayName", displayName);
     } else {
-      updateData(userID, "bio", bio, "users");
-    }
-
-    if (postDataSuccess) {
+      updateData("users", userID, "bio", bio);
       disableAllFields("all");
+      updateUserState("bio", bio);
     }
-    if (postDataError) {
-      alert(postDataError);
+    if (updateError) {
+      alert(updateError);
     }
   };
 
