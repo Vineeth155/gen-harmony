@@ -1,6 +1,6 @@
-import sanityClient from "@sanity/client";
+import { createClient } from "@sanity/client";
 
-export const client = sanityClient({
+export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID, // Sanity project ID
   dataset: "production", // Sanity dataset (usually 'production')
   apiVersion: "2024-12-28", // The current date in yyyy-mm-dd format
