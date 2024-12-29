@@ -1,72 +1,71 @@
 "use client";
 
-import { generateBase64SVG } from "@/utils/gradients";
-import useFetchDataByID from "../../hooks/useFetchDataByID";
-import fetchDataByID from "@/utils/fetchDataByID";
+import fetchMusicWithUserDetails from "@/utils/fetchMusicWithUserDetails";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import AudioPlayer from "@/components/audioPlayer/audioPlayer";
 
 export default function TrackCard({ slug }) {
-  const [user, setUser] = useState(null);
-  const { fetchedData } = useFetchDataByID(slug, "music");
-  const data = fetchedData?._document?.data?.value?.mapValue?.fields;
+  const [musicData, setMusicData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      if (data?.userId?.stringValue) {
-        try {
-          const lead = await fetchDataByID(data.userId.stringValue, "users");
-          if (!lead.error) {
-            setUser(lead.data);
-          }
-        } catch (error) {
-          console.error("Failed to fetch user:", error);
-        }
+    const fetchDetails = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const details = await fetchMusicWithUserDetails(slug);
+        setMusicData(details);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchUser(); // Call the async function
-  }, [data]);
+    fetchDetails();
+  }, [slug]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (!musicData) {
+    return <p>No Music Data available.</p>;
+  }
+
+  const { music, user } = musicData;
 
   return (
-    <div className="w-4/5 grid grid-cols-[0.5fr_1.5fr] mt-12">
+    <div className="max-w-11/12 px-4 lg:max-w-4/5 grid grid-cols-1 sm:grid-cols-[0.8fr_1.2fr] lg:grid-cols-[0.5fr_1.5fr] mt-12 xl:gap-8">
       <div className="h-full">
-        {data?.description && (
-          //   <img
-          //     className={`object-cover h-full max-h-full`}
-          //     alt={data?.description?.stringValue}
-          //     src={generateBase64SVG(
-          //       data?.description?.stringValue,
-          //       300,
-          //       "square"
-          //     )}
-          //   />
+        {music?.description && (
           <AudioPlayer
-            url={data?.audioUrl?.stringValue}
-            // title={data.name.stringValue}
-            image={generateBase64SVG(
-              data?.description?.stringValue,
-              300,
-              "square"
-            )}
+            url={music?.audioUrl}
+            // title={music.name}
+            description={music?.description}
           />
         )}
       </div>
-      {data && (
-        <div className="w-full h-full px-4 ">
+      {music && (
+        <div className="w-fit h-full pl-4 ">
           <div>
-            <p>Title</p>
+            <p className="invisible sm:visible">Title</p>
             <h2 className="text-6xl font-medium border-2 border-foreground w-fit p-1 pb-2">
-              {data?.name?.stringValue}
+              {music?.name}
             </h2>
           </div>
           <p className="text-xl mb-8 border-2 border-foreground w-fit p-1">
-            {data?.description?.stringValue}
+            {music?.description}
           </p>
           {user && (
             <Link
-              href={`/profile/${data.userId.stringValue}`}
+              href={`/profile/${music.userId}`}
               className="group flex border-2 border-foreground w-fit hover:bg-foreground hover:text-background font-medium ease-in-out duration-800"
             >
               <span className="block p-1">{user.displayName}</span>
@@ -76,11 +75,11 @@ export default function TrackCard({ slug }) {
               </span>
             </Link>
           )}
-          {data && (
+          {music && (
             <div className="mt-8 border-2 border-foreground w-fit p-1">
               <p>
                 <span className="px-2 py-1 mr-2 bg-foreground text-background border border-foreground w-fit rounded-full">
-                  {data?.likes.integerValue}
+                  {music?.likes}
                 </span>
                 likes
               </p>

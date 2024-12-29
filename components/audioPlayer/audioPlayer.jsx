@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 // import { SpeakerWaveIcon } from "@heroicons/react/24/outline";
 // import { PlayIcon, PauseIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
+import { generateBase64SVG } from "@/utils/gradients";
 
 // const sound = {
 //   title: "Card Title",
@@ -9,7 +10,7 @@ import Image from "next/image";
 //   imageUrl: "/CalmOceanWaves.png",
 // };
 
-const AudioPlayer = ({ url, title = "", image }) => {
+const AudioPlayer = ({ url, title = "", description }) => {
   const [play, setPlay] = useState(false);
   const oceanRef = useRef(null);
   const MAX = 20;
@@ -32,14 +33,14 @@ const AudioPlayer = ({ url, title = "", image }) => {
 
   return (
     <>
-      <main className="flex min-h-full h-full flex-col items-center justify-center bg-background w-full">
-        <div className="bg-accent flex h-full max-w-fit flex-col border-2 border-foreground pb-4 text-center w-full">
+      <main className="flex min-h-full h-full w-4/5 mx-auto flex-col items-center justify-center bg-background sm:w-full rounded-2xl">
+        <div className="bg-accent flex h-full max-w-fit flex-col border-2 border-foreground pb-4 text-center w-full rounded-2xl ">
           <div className="relative flex-col space-y-0 h-full grid grid-rows-[1.7fr_0.3fr]">
             <Image
               width={200}
               height={200}
-              className="mx-auto w-full aspect-auto flex-shrink-0 h-full object-cover"
-              src={image}
+              className="mx-auto w-full aspect-auto flex-shrink-0 h-full object-cover rounded-t-xl"
+              src={generateBase64SVG(description, 300, "square")}
               alt="waves"
             />
             <button

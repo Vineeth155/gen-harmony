@@ -1,3 +1,4 @@
+import ProfileTracks from "@/components/profile/profileTracks";
 import UserDetails from "@/components/profile/userDetails";
 
 export default function Profile() {
@@ -6,6 +7,7 @@ export default function Profile() {
       <h1 className="text-5xl pb-8">Profile</h1>
       <UserDetails />
       {/* <ProfileForm /> */}
+      <ProfileTracks />
     </div>
   );
 }

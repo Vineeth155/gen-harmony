@@ -52,11 +52,11 @@ export const AppProvider = ({ children }) => {
           await setDoc(docRef, userData);
           setUser(userData);
         } catch (error) {
-          alert("Error updating user details:", error);
+          console.error("Error updating user details:", error);
         }
       }
     } catch (error) {
-      alert("Error signing in:", error);
+      console.error("Error signing in:", error);
     }
   };
 

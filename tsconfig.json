@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "components/inputField/inputField.jsx",
     "components/trackCard/trackCard.jsx",
-    "components/audioPlayer/audioPlayer.jsx"
+    "components/audioPlayer/audioPlayer.jsx",
+    "components/profile/profileTracks.jsx"
   ],
   "exclude": ["node_modules"]
 }
