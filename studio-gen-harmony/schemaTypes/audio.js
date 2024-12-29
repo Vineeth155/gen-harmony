@@ -34,5 +34,10 @@ export const audio = {
       title: 'User ID',
       type: 'string',
     },
+    {
+      name: 'userMail',
+      title: 'User Mail',
+      type: 'string',
+    },
   ],
 }
