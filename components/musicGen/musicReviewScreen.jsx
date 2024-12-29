@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import useUpdateData from "@/hooks/useUpdateData";
+import { useRouter } from "next/navigation";
 
 export default function MusicReviewScreen({
   audioUrl,
@@ -21,6 +22,8 @@ export default function MusicReviewScreen({
   const [name, setName] = useState("");
   const { userID, user, updateUserState } = useAppContext();
   const { updateData } = useUpdateData();
+
+  const router = useRouter();
 
   const handlePublish = async () => {
     const audioFile = new File([audioBlob], "audio-file.wav", {
@@ -53,7 +56,7 @@ export default function MusicReviewScreen({
         generationTime,
         generatedAt: serverTimestamp(),
         genres: [],
-        likes: 0,
+        likes: 1,
         comments: [],
         isPublic: true,
         name,
@@ -74,6 +77,7 @@ export default function MusicReviewScreen({
               updateData("users", userID, "genMusic", updatedGenMusic);
               updateUserState("genMusic", updatedGenMusic);
               unsubscribe();
+              router.push(`/track/${newDocRef.id}`);
             }
           }
         );
