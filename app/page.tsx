@@ -1,5 +1,5 @@
 // import Image from "next/image";
-import MusicGenApp from "../components/inputField/inputField";
+import MusicGenApp from "../components/musicGen/musicGen";
 
 export default function Home() {
   return (
@@ -13,6 +13,7 @@ export default function Home() {
           height={38}
           priority
         /> */}
+        {/* <MusicGenApp /> */}
         <MusicGenApp />
       </main>
     </div>
