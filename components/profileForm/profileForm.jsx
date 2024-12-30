@@ -5,9 +5,9 @@ import { useAppContext } from "@/app/context/appContext";
 import useUpdateData from "../../hooks/useUpdateData";
 
 const ProfileForm = () => {
-  const { user, userID, loadingAuth, updateUserState } = useAppContext();
+  const { user, userID, loadingAuth } = useAppContext();
 
-  const { updateData, updateSuccess, updateError } = useUpdateData();
+  const { updateData, updateError } = useUpdateData();
 
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
@@ -95,11 +95,9 @@ const ProfileForm = () => {
     if (field === "name") {
       updateData("users", userID, "displayName", displayName);
       disableAllFields("all");
-      updateUserState("displayName", displayName);
     } else {
       updateData("users", userID, "bio", bio);
       disableAllFields("all");
-      updateUserState("bio", bio);
     }
     if (updateError) {
       alert(updateError);
@@ -125,7 +123,7 @@ const ProfileForm = () => {
       <div className="group flex relative" ref={nameComponentRef}>
         <span
           onClick={() => handleButtonClick("name")}
-          className={`z-10 cursor-pointer bg-gray-400 text-black group-hover:block absolute -top-8 ease-in-out duration-300 ${
+          className={`z-[1] cursor-pointer bg-gray-400 text-black group-hover:block absolute -top-8 ease-in-out duration-300 ${
             disabledFields.name
               ? "opacity-0 group-hover:opacity-100"
               : "invisible"
@@ -169,7 +167,7 @@ const ProfileForm = () => {
         <div className="group flex relative" ref={bioComponentRef}>
           <span
             onClick={() => handleButtonClick("bio")}
-            className={`z-10 cursor-pointer bg-gray-400 text-black group-hover:block absolute -top-8 ease-in-out duration-300 ${
+            className={`z-[1] cursor-pointer bg-gray-400 text-black group-hover:block absolute -top-8 ease-in-out duration-300 ${
               disabledFields.bio
                 ? "opacity-0 group-hover:opacity-100"
                 : "invisible"

@@ -1,3 +1,4 @@
+import { useAppContext } from "@/app/context/appContext";
 import { useEffect, useState } from "react";
 
 export default function MusicInputScreen({
@@ -5,6 +6,8 @@ export default function MusicInputScreen({
   message,
   setMessage,
 }) {
+  const { user } = useAppContext();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [generationTime, setGenerationTime] = useState(0);
@@ -50,7 +53,6 @@ export default function MusicInputScreen({
 
       const base64Audio = await blobToBase64(audioBlob);
       const audioUrl = `data:audio/wav;base64,${base64Audio}`;
-
       clearInterval(id);
       setLoading(false);
       onGenerateSuccess(audioUrl, audioBlob, generationTime);
@@ -79,14 +81,18 @@ export default function MusicInputScreen({
       />
       <button
         onClick={handleGenerateMusic}
-        disabled={loading || !message || message.trim().length === 0}
-        className={`rounded-md w-full py-3 ${
-          loading || !message.trim()
-            ? "bg-gray-600 text-background"
-            : "bg-background border-4 border-foreground hover:bg-foreground hover:text-background duration-200"
+        disabled={loading || !message || message.trim().length === 0 || !user}
+        className={`rounded-md w-full py-3 border-4 ${
+          loading || !message.trim() || !user
+            ? "bg-gray-600 text-background border-transparent"
+            : "bg-background border-foreground hover:bg-foreground hover:text-background duration-200"
         } `}
       >
-        {loading ? "Generating..." : "Generate Music"}
+        {loading
+          ? "Generating..."
+          : !user
+            ? "Sign in to Generate"
+            : "Generate Music"}
       </button>
       {
         <p className={`text-center mt-4 ${loading ? "visible" : "invisible"}`}>

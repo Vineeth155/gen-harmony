@@ -75,7 +75,6 @@ export default function MusicReviewScreen({
                   ? [...user.genMusic, newDocRef.id]
                   : [newDocRef.id];
               updateData("users", userID, "genMusic", updatedGenMusic);
-              updateUserState("genMusic", updatedGenMusic);
               unsubscribe();
               router.push(`/track/${newDocRef.id}`);
             }

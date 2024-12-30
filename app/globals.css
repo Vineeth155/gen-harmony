@@ -24,3 +24,24 @@ body {
   border-top: 0; */
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.custom-audio-player {
+  background-color: var(--background) !important;
+  box-shadow: none !important;
+  height: fit-content !important;
+  padding-block: 1rem;
+  padding-inline: unset !important;
+}
+.custom-audio-player.rap-container .rap-controls {
+  margin-inline: 1rem;
+}
+.custom-audio-player.rap-container .rap-pp-icon path,
+.custom-audio-player.rap-container .rap-volume-btn path {
+  fill: var(--foreground);
+}
+.custom-audio-player.rap-container .rap-slider .rap-progress .rap-pin {
+  background-color: var(--foreground) !important;
+}
+.dark .custom-audio-player.rap-container .rap-slider {
+  background-color: gray;
+}

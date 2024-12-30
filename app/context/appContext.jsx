@@ -10,7 +10,13 @@ import {
   onAuthStateChanged,
 } from "../firebase"; // Import Firebase auth functions
 import { db } from "../firebase"; // Import Firestore methods
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 
 // Create a context
 const AppContext = createContext();
@@ -80,18 +86,23 @@ export const AppProvider = ({ children }) => {
 
   // Listen for authentication changes and update user data
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unSubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUserID(currentUser.uid);
-        // Fetch user data from Firestore if not cached
         const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          setUser(docSnap.data());
-        } else {
-          setUser(null);
-        }
+        // Listen for real-time changes to the user document
+        const unsubscribeSnapshot = onSnapshot(docRef, (docSnap) => {
+          if (docSnap.exists()) {
+            setUser(docSnap.data());
+            setLoadingAuth(false);
+          } else {
+            setUser(null);
+          }
+        });
+
+        // Clean up the Firestore listener when auth state changes
+        return () => unsubscribeSnapshot();
       } else {
         setUser(null);
         setUserID(null);
@@ -100,7 +111,7 @@ export const AppProvider = ({ children }) => {
       setLoadingAuth(false); // Mark authentication as resolved
     });
 
-    return () => unSubscribe();
+    return () => unSubscribeAuth();
   }, []);
 
   const contextValue = {

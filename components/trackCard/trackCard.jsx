@@ -42,7 +42,7 @@ export default function TrackCard({ slug }) {
   const { music, user } = musicData;
 
   return (
-    <div className="max-w-11/12 px-4 lg:max-w-4/5 grid grid-cols-1 sm:grid-cols-[0.8fr_1.2fr] lg:grid-cols-[0.5fr_1.5fr] mt-12 xl:gap-8">
+    <div className="max-w-11/12 px-4 lg:max-w-4/5 grid grid-cols-1 sm:grid-cols-[0.8fr_1.2fr] lg:grid-cols-[0.5fr_1.5fr] lg:w-4/5 mt-12 xl:gap-8">
       <div className="h-full">
         {music?.description && (
           <AudioPlayer
