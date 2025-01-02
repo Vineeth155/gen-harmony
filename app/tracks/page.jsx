@@ -2,7 +2,7 @@
 
 import MusicListLazy from "@/components/musicList/musicListLazy";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 
 function Page() {
   const searchParams = useSearchParams();
@@ -11,7 +11,9 @@ function Page() {
   return (
     <div className="mt-32 flex justify-center items-center flex-col">
       <h1 className="text-5xl pb-8">All Tracks</h1>
-      <MusicListLazy genreFilter={genre} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MusicListLazy genreFilter={genre || ""} />
+      </Suspense>
     </div>
   );
 }
