@@ -119,7 +119,7 @@ const ProfileForm = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center w-full p-8 gap-8">
+    <div className="flex flex-col justify-center w-full p-8 gap-8 border-t-2 lg:border-t-0">
       <div className="group flex relative" ref={nameComponentRef}>
         <span
           onClick={() => handleButtonClick("name")}

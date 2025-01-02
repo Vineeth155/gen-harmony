@@ -18,10 +18,13 @@ export default function MusicReviewScreen({
   generationTime,
   message,
   onBack,
+  genres,
 }) {
   const [name, setName] = useState("");
-  const { userID, user, updateUserState } = useAppContext();
+  const { userID, user } = useAppContext();
   const { updateData } = useUpdateData();
+
+  const labels = genres.slice(1).map((item) => item.label);
 
   const router = useRouter();
 
@@ -55,7 +58,7 @@ export default function MusicReviewScreen({
         audioUrl: sanityAudioUrl,
         generationTime,
         generatedAt: serverTimestamp(),
-        genres: [],
+        genres: labels,
         likes: 1,
         comments: [],
         isPublic: true,
@@ -76,7 +79,7 @@ export default function MusicReviewScreen({
                   : [newDocRef.id];
               updateData("users", userID, "genMusic", updatedGenMusic);
               unsubscribe();
-              router.push(`/track/${newDocRef.id}`);
+              router.push(`/tracks/${newDocRef.id}`);
             }
           }
         );
@@ -91,6 +94,15 @@ export default function MusicReviewScreen({
   return (
     <div className="px-4">
       <audio controls src={audioUrl} className="mt-4 w-full mb-6" />
+      {labels && (
+        <div className="flex gap-1 flex-wrap">
+          {labels.map((label, index) => (
+            <p className="px-2 py-1 border rounded-[20rem] text-xs" key={index}>
+              {label}
+            </p>
+          ))}
+        </div>
+      )}
       <input
         type="text"
         value={name}

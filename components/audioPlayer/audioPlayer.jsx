@@ -33,7 +33,7 @@ const AudioPlayer = ({ url, title = "", description }) => {
 
   return (
     <>
-      <main className="flex min-h-full h-full w-4/5 mx-auto flex-col items-center justify-center bg-background sm:w-full rounded-2xl">
+      <main className="flex min-h-full h-full md:w-4/5 mx-auto flex-col items-center justify-center bg-background sm:w-full rounded-2xl">
         <div className="bg-accent flex h-full max-w-fit flex-col border-2 border-foreground pb-4 text-center w-full rounded-2xl ">
           <div className="relative flex-col space-y-0 h-full grid grid-rows-[1.7fr_0.3fr]">
             <Image
@@ -79,7 +79,7 @@ const AudioPlayer = ({ url, title = "", description }) => {
             </button>
             {title.trim() && (
               <dl className="mt-1 flex flex-col p-2 pb-0">
-                <dd className="text-lg">{title}</dd>
+                <dd className="md:text-lg text-sm">{title}</dd>
               </dl>
             )}
             <div className="mx-4 flex pt-4">

@@ -7,13 +7,15 @@ import MusicReviewScreen from "./musicReviewScreen";
 const MusicGenApp = () => {
   const [message, setMessage] = useState("");
   const [generationTime, setGenerationTime] = useState(0);
+  const [genres, setGenres] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
 
-  const handleGenerateSuccess = (url, blob, time) => {
+  const handleGenerateSuccess = (url, blob, time, genres) => {
     setAudioUrl(url);
     setAudioBlob(blob);
     setGenerationTime(time);
+    setGenres(genres);
   };
 
   const handleBack = () => {
@@ -26,6 +28,7 @@ const MusicGenApp = () => {
         <MusicInputScreen
           message={message}
           setMessage={setMessage}
+          setGenres={setGenres}
           onGenerateSuccess={handleGenerateSuccess}
         />
       ) : (
@@ -34,6 +37,7 @@ const MusicGenApp = () => {
           audioBlob={audioBlob}
           generationTime={generationTime}
           message={message}
+          genres={genres}
           onBack={handleBack}
         />
       )}

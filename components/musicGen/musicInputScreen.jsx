@@ -54,8 +54,33 @@ export default function MusicInputScreen({
       const base64Audio = await blobToBase64(audioBlob);
       const audioUrl = `data:audio/wav;base64,${base64Audio}`;
       clearInterval(id);
+
+      // Classifier request
+      const classifierResponse = await fetch(
+        "https://api-inference.huggingface.co/models/MIT/ast-finetuned-audioset-10-10-0.4593",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_HUGGINGFACE_BREARER_TOKEN}`,
+          },
+          body: audioBlob, // Pass the raw audio blob here
+        }
+      );
+
+      if (!classifierResponse.ok) {
+        throw new Error(
+          `Classifier API request failed: ${classifierResponse.statusText}`
+        );
+      }
+
+      const classificationResult = await classifierResponse.json();
       setLoading(false);
-      onGenerateSuccess(audioUrl, audioBlob, generationTime);
+      onGenerateSuccess(
+        audioUrl,
+        audioBlob,
+        generationTime,
+        classificationResult
+      );
     } catch (error) {
       setError(`Error generating music: ${error.message}`);
       clearInterval(id);

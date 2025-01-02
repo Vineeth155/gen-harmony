@@ -60,9 +60,19 @@ export default function TrackCard({ slug }) {
               {music?.name}
             </h2>
           </div>
-          <p className="text-xl mb-8 border-2 border-foreground w-fit p-1">
+          <p className="text-xl border-2 border-foreground w-fit p-1">
             {music?.description}
           </p>
+          <div className="flex flex-wrap gap-4 mb-8 mt-2">
+            {music?.genres?.map((genre, index) => (
+              <p
+                key={index}
+                className="border rounded-full cursor-pointer px-2 bg-background hover:bg-foreground hover:text-background ease-in-out duration-200"
+              >
+                <Link href={`/tracks?genre=${genre}`}>{genre}</Link>
+              </p>
+            ))}
+          </div>
           {user && (
             <Link
               href={`/profile/${music.userId}`}
