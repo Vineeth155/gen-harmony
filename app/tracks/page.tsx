@@ -4,7 +4,7 @@ import MusicListLazy from "@/components/musicList/musicListLazy";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
-function page() {
+function Page() {
   const searchParams = useSearchParams();
   const genre = searchParams.get("genre");
 
@@ -16,4 +16,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
