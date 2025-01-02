@@ -13,12 +13,8 @@ import { db } from "@/app/firebase";
 import { AudioPlayer } from "react-audio-play";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
-const MusicListLazy = () => {
-  const searchParams = useSearchParams();
-  const genreFilter = searchParams.get("genre");
-
+const MusicListLazy = ({ genreFilter = "" }) => {
   const router = useRouter();
 
   const [musicList, setMusicList] = useState(null);
