@@ -30,7 +30,8 @@
     "components/inputField/inputField.jsx",
     "components/trackCard/trackCard.jsx",
     "components/audioPlayer/audioPlayer.jsx",
-    "components/profile/profileTracks.jsx"
+    "components/profile/profileTracks.jsx",
+    "app/tracks/page.jsx"
   ],
   "exclude": ["node_modules"]
 }
